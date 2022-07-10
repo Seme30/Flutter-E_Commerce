@@ -5,7 +5,7 @@ import 'package:e_commerce/utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class CartController{
+class CartController extends GetxController{
 
   final CartRepo cartRepo;
 
@@ -79,4 +79,11 @@ class CartController{
     });
     return totalQuantity;
   }
+
+  List<CartModel> get getItems {
+    return _items.entries.map((e){
+      return e.value;
+    }).toList();
+  }
+
 }

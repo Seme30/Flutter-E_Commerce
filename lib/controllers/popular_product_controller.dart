@@ -1,5 +1,6 @@
 import 'package:e_commerce/controllers/cart_controller.dart';
 import 'package:e_commerce/data/repo/popular_product_repo.dart';
+import 'package:e_commerce/models/CartModel.dart';
 import 'package:e_commerce/models/Product.dart';
 import 'package:e_commerce/utils/colors.dart';
 import 'package:flutter/material.dart';
@@ -26,17 +27,32 @@ class PopularProductController extends GetxController{
 
   void setQuantity(bool isIncrement){
     if(isIncrement){
-      (_cartItems+_quantity).isEqual(20)? Get.snackbar("Item Count", "You can't add more!",
-        backgroundColor: AppColors.mainColor,
-        colorText: Colors.white) 
-       : (_quantity = _quantity + 1);
+    _quantity = checkQuantity(_quantity + 1);
     }else{
-      (_cartItems+_quantity).isEqual(0)? Get.snackbar("Item Count", "You can't reduce more!",
-        backgroundColor: AppColors.mainColor,
-        colorText: Colors.white) 
-         : (_quantity = _quantity - 1);
+     _quantity = checkQuantity(_quantity - 1);
     }
     update();
+  }
+
+  int checkQuantity(int quantity){
+    if((_cartItems+_quantity)<0){
+      Get.snackbar("Item Count", "You can't reduce more!",
+        backgroundColor: AppColors.mainColor,
+        colorText: Colors.white);
+        if(_cartItems>0){
+          _quantity = - _cartItems;
+          return _quantity;
+        }
+        return 0;
+    } else if((_cartItems+_quantity)>20){
+        Get.snackbar("Item Count", "You can't add more!",
+        backgroundColor: AppColors.mainColor,
+        colorText: Colors.white);
+        return 20;
+    }
+    else{
+      return quantity;
+    } 
   }
 
   void initProduct(ProductModel product, CartController cart){
@@ -51,7 +67,6 @@ class PopularProductController extends GetxController{
   }
 
   void addItem(ProductModel product){
-    
       _cart.addItem(product, _quantity);
       _quantity = 0;
       _cartItems = _cart.getQuantity(product);
@@ -72,4 +87,9 @@ class PopularProductController extends GetxController{
   int get totalItems{
     return _cart.totalItems;
   }
+
+  List<CartModel> get getItems {
+    return _cart.getItems;
+  }
+
 }
