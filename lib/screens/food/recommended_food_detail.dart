@@ -36,23 +36,29 @@ class RecommendedFoodDetail extends StatelessWidget {
                   },
                   child: AppIcon(iconData: Icons.clear)),
                 GetBuilder<PopularProductController>(builder: (popularProduct){
-                  return Stack(
-                    children: [
-                      AppIcon(iconData: Icons.shopping_cart_outlined),
-                      Get.find<PopularProductController>().totalItems>=1?
-                      Positioned(
-                        right: 0,
-                        top: 0,
-                        child: AppIcon(iconData: Icons.circle, iconColor: Colors.transparent, size: 20, backgroundColor: AppColors.mainColor,)):
-                      Container(),
-                      Get.find<PopularProductController>().totalItems>=1?
-                      Positioned(
-                        right: 3,
-                        top: 3,
-                        child: BigText(text: Get.find<PopularProductController>().totalItems.toString(),
-                        size: 12, color: Colors.white,)):
-                      Container(),
-                    ],
+                  return GestureDetector(
+                    onTap: (){
+                      if(popularProduct.totalItems>=1)
+                       Get.toNamed(RouteHelper.getCartScreen());
+                    },
+                    child: Stack(
+                      children: [
+                        AppIcon(iconData: Icons.shopping_cart_outlined),
+                        popularProduct.totalItems>=1?
+                        Positioned(
+                          right: 0,
+                          top: 0,
+                          child: AppIcon(iconData: Icons.circle, iconColor: Colors.transparent, size: 20, backgroundColor: AppColors.mainColor,)):
+                        Container(),
+                        popularProduct.totalItems>=1?
+                        Positioned(
+                          right: 3,
+                          top: 3,
+                          child: BigText(text: popularProduct.totalItems.toString(),
+                          size: 12, color: Colors.white,)):
+                        Container(),
+                      ],
+                    ),
                   );
                 }),
               ]

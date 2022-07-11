@@ -17,7 +17,9 @@ class CartController extends GetxController{
   void addItem(ProductModel product, int quantity){
     var totalquantity = 0;
     if(_items.containsKey(product.id)){
+
       _items.update(product.id!, (value){
+
         totalquantity = value.quantity!+totalquantity;
         return CartModel(
            id: value.id,
@@ -26,7 +28,8 @@ class CartController extends GetxController{
           img: value.img,
           quantity: value.quantity!+quantity,
           isExist: true,
-          time: DateTime.now().toIso8601String()
+          time: DateTime.now().toIso8601String(),
+          product: product
         );
       });
       if(totalquantity<=0){
@@ -40,7 +43,8 @@ class CartController extends GetxController{
       img: product.img,
       quantity: quantity,
       isExist: true,
-      time: DateTime.now().toIso8601String()
+      time: DateTime.now().toIso8601String(),
+      product: product
     ));
     } else {
         Get.snackbar("Item Count", "You should at least add an item in the cart!",

@@ -1,4 +1,5 @@
 import 'package:e_commerce/controllers/cart_controller.dart';
+import 'package:e_commerce/routes/route_helper.dart';
 import 'package:e_commerce/utils/app_constants.dart';
 import 'package:e_commerce/utils/colors.dart';
 import 'package:e_commerce/utils/dimensions.dart';
@@ -30,10 +31,15 @@ class CartScreen extends StatelessWidget {
                   backgroundColor: AppColors.mainColor,
                   iconSize: Dimensions.iconSize24,),
                   SizedBox(width: Dimensions.width20*5,),
-                   AppIcon(iconData: Icons.home_outlined,
-                  iconColor: Colors.white,
-                  backgroundColor: AppColors.mainColor,
-                  iconSize: Dimensions.iconSize24,),
+                   GestureDetector(
+                    onTap: (){
+                      Get.toNamed(RouteHelper.getInitial());
+                    },
+                     child: AppIcon(iconData: Icons.home_outlined,
+                                     iconColor: Colors.white,
+                                     backgroundColor: AppColors.mainColor,
+                                     iconSize: Dimensions.iconSize24,),
+                   ),
                    AppIcon(iconData: Icons.shopping_cart,
                   iconColor: Colors.white,
                   backgroundColor: AppColors.mainColor,
@@ -52,8 +58,9 @@ class CartScreen extends StatelessWidget {
                   context: context,
                   removeTop: true,
                   child: GetBuilder<CartController>(builder: (cartController){
+                    var _cartList = cartController.getItems;
                     return ListView.builder(
-                    itemCount: cartController.getItems.length,
+                    itemCount: _cartList.length,
                     itemBuilder: (_,index){
                     return Container(
                       width: Dimensions.width20*5,
@@ -82,12 +89,12 @@ class CartScreen extends StatelessWidget {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                 children: [
-                                  BigText(text: cartController.getItems[index].name!, color: Colors.black54,),
+                                  BigText(text: _cartList[index].name!, color: Colors.black54,),
                                   SmallText(text: "Spicy"),
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
-                                      BigText(text: "\$ ${cartController.getItems[index].price}", color: Colors.redAccent,),
+                                      BigText(text: "\$ ${_cartList[index].price}", color: Colors.redAccent,),
                                       Container(
                                         padding: EdgeInsets.only(top: Dimensions.height10, bottom: Dimensions.height10, left: Dimensions.width10, right: Dimensions.width10),
                                         decoration: BoxDecoration(
@@ -98,17 +105,17 @@ class CartScreen extends StatelessWidget {
                                         children: [
                                           GestureDetector(
                                             onTap: (){
-                                              // popularProduct.setQuantity(false);
+                                              cartController.addItem(_cartList[index].product!, -1);
                                             },
                                             child: Icon(Icons.remove, color: AppColors.signColor,
                                             ),
                                           ),
                                           SizedBox(width: Dimensions.width10/2,),
-                                          BigText(text: "0",),
+                                          BigText(text: _cartList[index].quantity.toString(),),
                                           SizedBox(width: Dimensions.width10/2,),
                                           GestureDetector(
                                             onTap: (){
-                                              // popularProduct.setQuantity(true);
+                                              cartController.addItem(_cartList[index].product!, 1);
                                             },
                                             child: Icon(Icons.add, color: AppColors.signColor,)),
                                         ],
